@@ -1,0 +1,101 @@
+{
+  "name": "dsh-emotionalwhale",
+  "version": "0.0.4",
+  "private": true,
+  "type": "module",
+  "description": "按后劲动态决定「今天刷不刷 B 站」，结论写进 gate.json；自动发现并桥接所有主流养鱼插件（bili-whale / bili-scroll / dsh-fish / fish-soul / whale-panel / feed-scroll）。",
+  "main": "lib/index.js",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-rc.2 <0.3.0-0"
+  },
+  "scripts": {
+    "check": "node \"${DSH_HOME:-$HOME/.dsh}/skills/dsh-go-plugin/kit/bin/check.mjs\" . --load",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dshGo": {
+    "v": 1,
+    "title": {
+      "zh": "情感鲸鱼",
+      "en": "Emotional Whale"
+    },
+    "icon": "heart",
+    "contributes": {
+      "composer.actions": [
+        {
+          "id": "open-today",
+          "label": {
+            "zh": "今天刷吗",
+            "en": "Today?"
+          },
+          "icon": "heart",
+          "effect": {
+            "type": "open",
+            "page": "panel:today"
+          }
+        },
+        {
+          "id": "open-trend",
+          "label": {
+            "zh": "这阵子",
+            "en": "Trend"
+          },
+          "icon": "time",
+          "effect": {
+            "type": "open",
+            "page": "panel:trend"
+          }
+        }
+      ],
+      "composer.strip": [
+        {
+          "id": "gate",
+          "icon": "heart",
+          "text": "今天刷不刷",
+          "panel": "today"
+        }
+      ],
+      "panels": [
+        {
+          "id": "today",
+          "title": {
+            "zh": "今天刷不刷",
+            "en": "Today"
+          },
+          "icon": "heart",
+          "placement": [
+            "session.tab",
+            "chat.panel"
+          ]
+        },
+        {
+          "id": "weights",
+          "title": {
+            "zh": "权重设置",
+            "en": "Weights"
+          },
+          "icon": "chart",
+          "placement": [
+            "features"
+          ]
+        },
+        {
+          "id": "trend",
+          "title": {
+            "zh": "这阵子",
+            "en": "Trend"
+          },
+          "icon": "time",
+          "placement": [
+            "session.tab",
+            "features"
+          ]
+        }
+      ]
+    }
+  }
+}
