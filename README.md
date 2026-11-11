@@ -6,7 +6,13 @@
 
 所有概率都是 0–1 的小数，1 = 100%。
 
-> **改名说明（0.0.4）**：项目名改为 `dsh-emotionalwhale`，版本 `0.0.4`，中文名保留「情感鲸鱼」。
+> **0.0.5 修了什么**
+> 1. **手动「强制刷 / 强制不刷」现在对宿主真的生效**：强制时 gate 里的 `probability` / `noWatchProbability` 一起写成 1/0，不再只改 `watch` 字段。以前面板写着「今天你手动定了：不刷」，bili-whale 仍会按原概率自己掷一次（实测 75% 的概率照样去刷）。
+> 2. gate 新增 `modelProbability`：强制前的模型原始概率，面板解释用；`probability` 是生效值，宿主读到的就是它。
+> 3. `diceWeight` 的默认值注释从 0.3 更正为 0.2（实际默认一直是 0.2）。
+> 4. 补了一条回归测试：强制时生效概率必须是 0/1，模型概率仍然保留。
+
+> **改名说明（0.0.4）**：项目名改为 `dsh-emotionalwhale`，中文名保留「情感鲸鱼」。
 > 插件目录、默认 state 路径、CLI 都换成新名字；上一代 `dsh-whale` 或更早 `local-whale-mood` 的 state，会在第一次运行时**复制**到新目录，之后只读写新目录，删旧文件夹不会丢配置。
 > 为了不弄坏已经打过补丁的宿主，gate 协议名 `whale-mood/gate@1`、补丁 marker `MOOD-BRIDGE*` 保持不变；旧的 `*.whale-mood.bak` 也仍能还原。
 
@@ -44,7 +50,7 @@ node bin/dsh-emotionalwhale.mjs --restore
 ### 方式 A：有 shell（Termux / 电脑连手机）
 
 ```sh
-unzip dsh-emotionalwhale-V0.0.4.zip
+unzip dsh-emotionalwhale-V0.0.5.zip
 cd dsh-emotionalwhale
 sh install.sh
 ```
@@ -271,7 +277,7 @@ roll ≥ 判定线 → 不刷
 
 - **状态条**：`今天：不刷 58%`
 - **胶囊**：`今天刷吗`、`这阵子`
-- **面板**：`今天刷不刷`（概率、结论、后劲、影响因素、14 天曲线、重掷/强制/自检）、`权重设置`（日记路径 + 11 个滑杆 + 最近日记 + 路径状态）、`这阵子`（柱状图 + 最近 8 天表）
+- **面板**：`今天刷不刷`（概率、结论、后劲、影响因素、14 天曲线、重掷/强制/自检；强制后概率直接显示 100% / 0%，因为那是宿主实际会读到的值）、`权重设置`（日记路径 + 11 个滑杆 + 最近日记 + 路径状态）、`这阵子`（柱状图 + 最近 8 天表）
 
 ## 文件
 
@@ -288,6 +294,7 @@ roll ≥ 判定线 → 不刷
   "schema": "whale-mood/gate@1",
   "date": "2026-11-09",
   "probability": 0.422,
+  "modelProbability": 0.422,
   "noWatchProbability": 0.578,
   "watch": false,
   "roll": 0.661,
@@ -401,5 +408,6 @@ DSH_HOME=/tmp/dshhome node <kit>/bin/check.mjs . --load --lang zh
 - 日记只读，插件不写日记、不碰 B 站、不自动评论。
 - gate 过期 36 小时后宿主应退回自己的默认值。
 - 概率是 0–1 的「想刷」概率；宿主要「不刷」就取 `noWatchProbability`。
+- 手动强制会同时定死 `probability` / `noWatchProbability`（1/0），所以宿主不用再掷一次；`modelProbability` 保留模型原始概率。
 - 状态是全局一份（一只鲸鱼一份），不按会话分。
 - 如果日记格式特殊，把路径填进「权重设置」，或给一条样例再收紧解析。

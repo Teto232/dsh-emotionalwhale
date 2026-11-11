@@ -58,6 +58,16 @@ test('手动强制会覆盖概率结论', () => {
   assert.match(verdictText(day, true), /刷/)
 })
 
+test('强制时生效概率也定死，宿主不会按原概率再掷一次', () => {
+  const skip = computeDay(DATE, state([], {}, { override: { [DATE]: 'skip' } }), CFG, { atMs: AT })
+  assert.equal(skip.probability, 0)
+  assert.equal(skip.noWatchProbability, 1)
+  assert.ok(skip.modelProbability > 0.05, '原始模型概率仍保留，方便面板解释')
+  const watch = computeDay(DATE, state([], {}, { override: { [DATE]: 'watch' } }), CFG, { atMs: AT })
+  assert.equal(watch.probability, 1)
+  assert.equal(watch.noWatchProbability, 0)
+})
+
 test('后劲没缓过来的不看日，不算「憋久了」的回弹', () => {
   const normal = state([], {
     [addDays(DATE, -1)]: { watch: false },
