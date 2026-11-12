@@ -1,6 +1,6 @@
 {
   "name": "dsh-emotionalwhale",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "private": true,
   "type": "module",
   "description": "按后劲动态决定「今天刷不刷 B 站」，结论写进 gate.json；自动发现并桥接所有主流养鱼插件（bili-whale / bili-scroll / dsh-fish / fish-soul / whale-panel / feed-scroll）。",
@@ -88,6 +88,18 @@
           "title": {
             "zh": "这阵子",
             "en": "Trend"
+          },
+          "icon": "time",
+          "placement": [
+            "session.tab",
+            "features"
+          ]
+        },
+        {
+          "id": "memory",
+          "title": {
+            "zh": "记忆",
+            "en": "Memory"
           },
           "icon": "time",
           "placement": [
