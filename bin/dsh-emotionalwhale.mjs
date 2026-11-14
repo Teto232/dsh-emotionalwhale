@@ -16,7 +16,7 @@ import { bootstrap } from '../lib/bootstrap.js'
 import { discoverWhale } from '../lib/discover.js'
 import { selfcheck, selfcheckText } from '../lib/selfcheck.js'
 import { applyAllBridges, bridgeStatus, restoreAllBridges } from '../lib/bridge.js'
-import { bumpSalt, setOverride } from '../lib/store.js'
+import { bumpSalt } from '../lib/store.js'
 
 const snapshot = () => buildSnapshot()
 
@@ -29,7 +29,6 @@ function help() {
       '  emotionalwhale --watch           想刷概率（0–1）',
       '  emotionalwhale --decide          watch | skip',
       '  emotionalwhale --diary           读到的日记摘要（含路径自检结果）',
-      '  emotionalwhale --force watch|skip|auto',
       '  emotionalwhale --reroll',
       '  emotionalwhale --bridge         自动给所有养鱼宿主打桥接',
       '  emotionalwhale --restore        卸掉桥接，把宿主还原回原文',
@@ -114,14 +113,6 @@ if (cmd === '--gate' || cmd === '--json') {
   console.log(JSON.stringify(target, null, 2))
 } else if (cmd === '--reroll') {
   bumpSalt(dateOf(Date.now()))
-  console.log(JSON.stringify(snapshot().gate, null, 2))
-} else if (cmd === '--force') {
-  const mode = args[1]
-  if (!['watch', 'skip', 'auto'].includes(mode)) {
-    console.error('--force 只收 watch / skip / auto')
-    process.exit(2)
-  }
-  setOverride(dateOf(Date.now()), mode === 'auto' ? null : mode)
   console.log(JSON.stringify(snapshot().gate, null, 2))
 } else {
   console.error('不认识的参数：' + cmd)

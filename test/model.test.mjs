@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { DEFAULT_CONFIG, addDays, computeDay, normalizeConfig, verdictText } from '../lib/model.js'
+import { DEFAULT_CONFIG, addDays, computeDay, normalizeConfig } from '../lib/model.js'
 
 const DATE = '2026-11-09'
 const AT = new Date(2026, 10, 9, 9, 0, 0).getTime()
@@ -50,22 +50,12 @@ test('同一天结果稳定，重掷会改变骰子', () => {
   assert.notEqual(c.roll, a.roll)
 })
 
-test('手动强制会覆盖概率结论', () => {
-  const s = state([entry('sad', 1, 1)], {}, { override: { [DATE]: 'watch' } })
-  const day = computeDay(DATE, s, CFG, { atMs: AT })
-  assert.equal(day.watch, true)
-  assert.equal(day.forced, true)
-  assert.match(verdictText(day, true), /刷/)
-})
-
-test('强制时生效概率也定死，宿主不会按原概率再掷一次', () => {
-  const skip = computeDay(DATE, state([], {}, { override: { [DATE]: 'skip' } }), CFG, { atMs: AT })
-  assert.equal(skip.probability, 0)
-  assert.equal(skip.noWatchProbability, 1)
-  assert.ok(skip.modelProbability > 0.05, '原始模型概率仍保留，方便面板解释')
-  const watch = computeDay(DATE, state([], {}, { override: { [DATE]: 'watch' } }), CFG, { atMs: AT })
-  assert.equal(watch.probability, 1)
-  assert.equal(watch.noWatchProbability, 0)
+test('旧版强制状态不再生效，概率仍由模型算', () => {
+  const forced = computeDay(DATE, state([], {}, { override: { [DATE]: 'skip' } }), CFG, { atMs: AT })
+  const plain = computeDay(DATE, state(), CFG, { atMs: AT })
+  assert.equal(forced.forced, false)
+  assert.equal(forced.probability, plain.probability)
+  assert.equal(forced.noWatchProbability, plain.noWatchProbability)
 })
 
 test('后劲没缓过来的不看日，不算「憋久了」的回弹', () => {
