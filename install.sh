@@ -3,7 +3,7 @@
 #   1. 复制到 $DSH_HOME/dsh-go/plugins/dsh-emotionalwhale（保留已有 state/）
 #   2. 自动注册到 dsh 的 web profile
 #   3. 自己找 bili-whale / dsh-emotionalwhale，认出日记位置并写进配置
-#   4. 建好日记目录，先算一次今天的结论（宿主马上能读 gate.json）
+#   4. 建好日记目录，先算一次今天的不刷概率（宿主马上能读 gate.json）
 #   5. 跑内置自检并打印结果
 #
 # 用法：

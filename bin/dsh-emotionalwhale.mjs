@@ -6,7 +6,6 @@
 //   emotionalwhale --watch           只打印「想刷」概率（0–1）
 //   emotionalwhale --decide          打印 watch / skip
 //   emotionalwhale --diary           打印读到的日记摘要
-//   emotionalwhale --force skip|watch|auto
 //   emotionalwhale --reroll
 
 import { dateOf, moodLabel } from '../lib/model.js'
